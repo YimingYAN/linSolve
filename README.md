@@ -1,7 +1,7 @@
 cma27
 =====
 
-c++ interface of MA27 from HSL Mathematical Software Library
+C++ interface to MA27 from HSL Mathematical Software Library
 
 ###How to use
 1. Download ```MA27```. Go to http://www.hsl.rl.ac.uk/archive/, find MA27 and choose source.
