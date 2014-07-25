@@ -1,9 +1,14 @@
-example: example.cpp cma27.h ma27d.o
+CXX=g++
+FXX=gfortran
+mainName=example
+
+example: $(mainName).cpp cma27.h ma27d.o
 	@clear
-	g++ -o example -lgfortran ma27d.o example.cpp -L /usr/local/gfortran/lib
+	$(CXX) -o $(mainName) -lgfortran ma27d.o $(mainName).cpp -L /usr/local/gfortran/lib
 ma27d.o:
-	gfortran -o ma27d.o -c ma27d.f
+	$(FXX) -o ma27d.o -c ma27d.f
 test:
-	./example
+	./$(mainName)
 clean:
 	rm *.o
+	rm $(mainName)
