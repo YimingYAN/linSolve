@@ -1,3 +1,8 @@
+/*
+* Header file for cma27
+* Created by Yiming Yan 
+* 25 July 2014
+*/
 extern "C" {
     extern void ma27id_(int icntl[30], double cntl[5]);
     /* MA27ID_ C++ interface for fortran routine MA27ID (Initialize)
