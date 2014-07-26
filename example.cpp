@@ -33,10 +33,8 @@ int main (int argc, char *argv[])
     int liw = 40;
     int la = 30;
     
-    
     int irn[nz];
     int icn[nz];
-    cout<<"irn and icn: "<<endl;
     
     int iw[liw];
     int ikeep[3*n];
