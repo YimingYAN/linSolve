@@ -92,15 +92,33 @@ int main (int argc, char *argv[])
     /* ====== Begin Vars for MA57 ====== */
     int icntl57[20];
     double cntl57[5];
+    int lkeep57 = 100;
+    int keep57[lkeep];
+    int iwork57[5*n];
+    int info57[40];
+    double rinfo57[20];
+    
     
     /* ====== End Vars for MA57 ====== */
     
     /* ====== Begin MA57 ====== */
     // initialize
-    //ma57id_(cntl57, icntl57);
-    //icntl[4] = 4;
+    ma57id_(cntl57, icntl57);
+    icntl57[4] = 4;
+    
+    cout<< "Run MA57D..."<<endl;
+    cout<<" ======= ======= ======= "<<endl;
+    
     
     // analyze
+    ma57ad_(&n, &nz, irn, icn, &lkeep57, keep57, iwork57,
+            icntl57, info57, rinfo57);
+    
+    // factorize
+    
+    // solve
+    
     /* ====== End MA57 ====== */
+    
     return 0;
 }
