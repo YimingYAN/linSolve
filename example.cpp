@@ -1,4 +1,5 @@
-#include "cma27.h"
+#include "include/cma27.h"
+#include "include/cma57.h"
 #include <cmath>
 #include <iostream>
 
@@ -88,5 +89,18 @@ int main (int argc, char *argv[])
             &nsteps, icntl, info);
     /* ====== End MA27 ====== */
     
+    /* ====== Begin Vars for MA57 ====== */
+    int icntl57[20];
+    double cntl57[5];
+    
+    /* ====== End Vars for MA57 ====== */
+    
+    /* ====== Begin MA57 ====== */
+    // initialize
+    //ma57id_(cntl57, icntl57);
+    //icntl[4] = 4;
+    
+    // analyze
+    /* ====== End MA57 ====== */
     return 0;
 }
