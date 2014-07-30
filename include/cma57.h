@@ -8,8 +8,8 @@ extern "C" {
 #endif
     extern void ma57id_(double cntl[5], int icntl[20]);
     /*
-     * cntl     - array of double; contains double control values
-     * icntl    - array of  integer; contaitns integer control values
+     * cntl     - double array of length 5; contains double control values
+     * icntl    - integer array of length 20; contaitns integer control values
      */
     
     extern void ma57ad_(int *n, int *ne, int *irn, int *jcn,
