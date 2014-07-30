@@ -139,7 +139,7 @@ void cma27::Factorize(double** A)
     {
         for (int j=i; j<n; j++)
         {
-            if (fabs(A[i][j]) > 1e-32)
+            if (fabs(A[i][j]) > 1e-5)
             {
                 factor[counter] = A[i][j];
                 counter++;
