@@ -10,10 +10,20 @@ int main (int argc, char *argv[])
     cout<<"Test cma27.h... "<<endl;
     
     /* ====== Begin Data ====== */
-    double A[5][5];
-    for (int i = 0; i<5; i++)
+    int n  = 5;
+    int nz = 7;
+    
+    
+    double** A;
+    A = new double* [n];
+    for (int i=0; i<n; i++)
     {
-        for (int j=0; j<5; j++) {
+        A[i] = new double[n];
+    }
+    
+    for (int i = 0; i<n; i++)
+    {
+        for (int j=0; j<n; j++) {
             A[i][j] = 0.0;
         }
     }
@@ -23,73 +33,38 @@ int main (int argc, char *argv[])
     A[3][2] = 5;
     A[4][1] = 6; A[4][4] = 1;
     
-    double rhs[5] = {8., 45., 31., 15., 17.};
+    double rhs[n];
+    rhs[0] = 8; rhs[1] = 45.; rhs[2] = 31.; rhs[3] = 15.; rhs[4] = 17.;
+    
+    double* sol;
     /* ====== End Data ====== */
     
-    /* ====== Begin Vars for MA27 ====== */
-    int icntl[30];
-    double cntl[5];
-    int n  = 5;
-    int nz = 7;
-    int liw = 40;
+    
+    /* ====== Begin MA27 ====== */
+    cma27 cma27(n, nz, A);
+    cma27.Initialize();
+    cma27.Analyze();
+    cma27.Factorize(A);
+    cma27.Solve(rhs);
+    sol = cma27.getSol();
+    cout<< "Solution: "<<endl;
+    for (int i=0; i<n; i++)
+    {
+        cout<<"\t"<<sol[i]<<endl;
+    }
+    /* ====== End MA27 ====== */
+
+    /* ====== Begin Vars for MA57 ====== */
     int la = 30;
+    double a[la];
+    
     
     int irn[nz];
     int icn[nz];
     
+    int liw = 40;
     int iw[liw];
-    int ikeep[3*n];
-    int iw1[n];
-    int nsteps;
-    int iflag = 0;
-    int info[20];
-    double ops;
-    
-    double a[la];
-    int maxfrt;
-    
-    int counter = 0;
-    for (int i=0; i<nz; i++)
-    {
-        for (int j=i; j<n; j++)
-        {
-            if (fabs(A[i][j]) > 1e-32)
-            {
-                irn[counter] = i+1; // fortran index
-                icn[counter] = j+1; // start from 1
-                a[counter] = A[i][j];
-                
-                counter++;
-            }
-        }
-    }
-    /* ====== End Vars for MA27 ====== */
-    
-    /* ====== Begin MA27 ====== */
-    // initialize
-    ma27id_(icntl, cntl);
-    icntl[2] = 2;
-    
-    cout<< "Run MA27D..."<<endl;
-    cout<<" ======= ======= ======= "<<endl;
-    
-    
-    // analyze
-    ma27ad_(&n, &nz, irn, icn, iw, &liw, ikeep, iw1, &nsteps,
-            &iflag, icntl, cntl, info, &ops);
-    
-    // factorize
-    ma27bd_(&n, &nz, irn, icn, a, &la, iw, &liw,
-            ikeep,  &nsteps, &maxfrt, iw1,
-            icntl,  cntl, info);
-    
-    // solve
-    double w[maxfrt];
-    ma27cd_(&n, a, &la, iw, &liw, w, &maxfrt, rhs, iw1,
-            &nsteps, icntl, info);
-    /* ====== End MA27 ====== */
-    
-    /* ====== Begin Vars for MA57 ====== */
+
     int icntl57[20];
     double cntl57[5];
     int lkeep57 = 100;
@@ -105,26 +80,28 @@ int main (int argc, char *argv[])
     double w57[lw57];
     
     // reset a and rhs
-    counter = 0;
+    int counter = 0;
     for (int i=0; i<nz; i++)
     {
         for (int j=i; j<n; j++)
         {
             if (fabs(A[i][j]) > 1e-32)
             {
+                irn[counter] = i+1; // fortran index
+                icn[counter] = j+1; // start from 1
                 a[counter] = A[i][j];
+                
                 counter++;
             }
         }
     }
-    rhs[0] = 8; rhs[1] = 45.; rhs[2] = 31.; rhs[3] = 15.; rhs[4] = 17.;
     
     /* ====== End Vars for MA57 ====== */
     
     /* ====== Begin MA57 ====== */
     // initialize
     ma57id_(cntl57, icntl57);
-    icntl57[4] = 4;
+    //icntl57[4] = 4;
     
     cout<< "Run MA57D..."<<endl;
     cout<<" ======= ======= ======= "<<endl;
@@ -143,6 +120,13 @@ int main (int argc, char *argv[])
             &lrhs57, w57, &lw57, iw, icntl57, info57);
     
     /* ====== End MA57 ====== */
+    
+    /* Release memory*/
+    for (int i=0; i<5; i++)
+    {
+        delete[] A[i];
+    }
+    delete[] A;
     
     return 0;
 }
