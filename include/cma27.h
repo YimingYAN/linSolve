@@ -8,8 +8,8 @@ extern "C" {
 #endif
     extern void ma27id_(int icntl[30], double cntl[5]);
     /* MA27ID_ C interface for fortran routine MA27ID (Initialize)
-     * icntl    - array of  integer; contaitns integer control values
-     * cntl     - array of double; contains double control values
+     * icntl    - integer array of length 30; contaitns integer control values
+     * cntl     - double array of length 5; contains double control values
      */
     
     extern void ma27ad_(int *n, int *nz, int *irn, int *icn, int iw[],
