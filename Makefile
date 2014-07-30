@@ -19,7 +19,7 @@ $(FSRC)/%.o: $(FSRC)/%.c
 	$(FC) $(FFLAG) -o $@ -c $<
 
 test:
-	./$(mainName)
+	./$(main)
 clean:
 	rm $(FOBJS)
-	rm $(mainName)
+	rm $(main)
