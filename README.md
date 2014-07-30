@@ -12,4 +12,5 @@ The interface  works with MA27 version 1.0.0.
 and click [Code Download](http://www.hsl.rl.ac.uk/download/MA57/3.9.0/). 
 You will have to register first in order to get a copy of MA57.
 The interface works with MA57 version 3.9.0.
+4. Copy ```ddeps.f```, ```ma57d.f```, ```fakemetis.f``` to ```src/MA57```
 4. Try ```make``` and then ```make test``` to see if it works.
