@@ -1,3 +1,5 @@
+main=example
+
 CXX=g++
 FC=gfortran
 
@@ -7,11 +9,11 @@ FOBJS=$(patsubst %.f, %.o, $(wildcard src/*/*.f))
 
 FFLAG= -g -O2
 BLAS=-lblas
-CXXlib=-lgfortran -L /usr/local/gfortran/lib $(BLAS)
-mainName=example
+LIBS=-lgfortran -L /usr/local/gfortran/lib $(BLAS)
 
-example: $(mainName).cpp $(CSRCS) $(FOBJS)
-	$(CXX) -o $(mainName) $(FOBJS) $(mainName).cpp $(CXXlib)
+
+example: $(main).cpp $(CSRCS) $(FOBJS)
+	$(CXX) -o $(main) $(FOBJS) $(main).cpp $(LIBS)
 
 $(FSRC)/%.o: $(FSRC)/%.c
 	$(FC) $(FFLAG) -o $@ -c $<
