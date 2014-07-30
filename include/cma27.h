@@ -11,7 +11,6 @@
 class cma27
 {
 public:
-    cma27();
     cma27(const int n, const int nz, double** A);
     
     void Initialize();
@@ -82,8 +81,6 @@ extern "C" {
 }
 #endif
 
-cma27::cma27(){};
-
 cma27::cma27(const int i_n, const int i_nz, double** A)
 {
     n   = i_n;
@@ -119,7 +116,7 @@ cma27::cma27(const int i_n, const int i_nz, double** A)
 void cma27::Initialize()
 {
     ma27id_(icntl, cntl);
-    icntl[2] = 2;
+    //icntl[2] = 2;
 }
 
 void cma27::Analyze()
