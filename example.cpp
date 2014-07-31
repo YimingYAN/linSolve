@@ -1,5 +1,5 @@
-#include "include/cma27.h"
-#include "include/cma57.h"
+#include "cma27.h"
+#include "cma57.h"
 #include <iostream>
 
 using namespace std;
