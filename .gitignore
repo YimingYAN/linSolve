@@ -1,0 +1,4 @@
+example
+example.dSYM/
+*.f
+*.o
