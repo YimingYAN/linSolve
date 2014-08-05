@@ -5,6 +5,8 @@
 
 using namespace std;
 
+void printSol(int n, const double* sol);
+
 int main (int argc, char *argv[])
 {
  
@@ -29,47 +31,60 @@ int main (int argc, char *argv[])
     double b[n];
     b[0] = 8; b[1] = 45.; b[2] = 31.; b[3] = 15.; b[4] = 17.;
     
-    double* sollinSol;
-    double* sollinSol2;
+    double* sol27_1;
+    double* sol27_2;
+    double* sol57_1;
+    double* sol57_2;
     /* ====== End Data ====== */
     
-    /* ====== Test linSolve with MA27 ====== */
-	linSolve<double*, double**,MA27> linSolveT(n, nz, A);
+    /* ====== Test linSolve ====== */
+    cout<<"====== Test linSolve ======"<<endl;
+	linSolve<double*, double**,MA27> linSolveT27(n, nz, A);
+    linSolve<double*, double**,MA57> linSolveT57(n, nz, A);
     /*
      * Here we set the vector type to be double* and the matrix type to be double**
      * Currently it only accepts dynamically allocated arrays, 
      * becasue of the implementation of MA27 and MA57.
      */
     
-    linSolveT.Factorize();
-    linSolveT.Solve(b);
-    sollinSol = linSolveT.getSol();
+    /*
+     * Test MA27
+     */
+    linSolveT27.Factorize();
+    linSolveT27.Solve(b);
+    sol27_1 = linSolveT27.getSol();
     
-    cout<<"Solution for Ax = b:"<<endl;
-    cout<<"( "<<sollinSol[0];
-    for (int i=1; i<n; i++)
-    {
-        cout<<", "<<sollinSol[i];
-    }
-    cout<<" )"<<endl;
+    cout<<"Solution for Ax = b using MA27:"<<endl;
+    printSol(n, sol27_1);
     
     /*
      * Just the right hand side; no need to factorize the matirx again.
      */
     double b2[5] = {1,2,1,2,3};
-    linSolveT.Solve(b2);
-    sollinSol2 = linSolveT.getSol();
     
-    cout<<"Solution for Ax = b2:"<<endl;
-    cout<<"( "<<sollinSol2[0];
-    for (int i=1; i<n; i++)
-    {
-        cout<<", "<<sollinSol2[i];
-    }
-    cout<<" )"<<endl;
+    linSolveT27.Solve(b2);
+    sol27_2 = linSolveT27.getSol();
+    cout<<"Solution for Ax = b2 using MA27:"<<endl;
+    printSol(n, sol27_2);
+    
+    /*
+     * Test MA57
+     */
+    linSolveT57.Factorize();
+    linSolveT57.Solve(b);
+    sol57_1 = linSolveT57.getSol();
+    
+    cout<<"Solution for Ax = b using MA57:"<<endl;
+    printSol(n, sol57_1);
+    
+    linSolveT57.Solve(b2);
+    sol57_2 = linSolveT57.getSol();
+    cout<<"Solution for Ax = b using MA57:"<<endl;
+    printSol(n, sol57_2);
     
     /* ====== End linSolve ====== */
-
+    
+    
     /* Release memory*/
     for (int i=0; i<5; i++)
     {
@@ -78,4 +93,14 @@ int main (int argc, char *argv[])
     delete[] A;
     
     return 0;
+}
+
+void printSol(int n, const double* sol)
+{
+    cout<<"( "<<sol[0];
+    for (int i=1; i<n; i++)
+    {
+        cout<<", "<<sol[i];
+    }
+    cout<<" )"<<endl;
 }
