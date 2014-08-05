@@ -1,20 +1,19 @@
 /*
- * Header file for cma57
+ * Header file for MA57
  * Created by Yiming Yan
  * 29 July 2014
  */
-#ifndef maSolver_cma57_h
-#define maSolver_cma57_h
+#ifndef linsolve_MA57_h
+#define linsolve_MA57_h
 
 #include <cmath>
 
-class cma57
+class MA57
 {
 public:
-    cma57(const int n, const int nz, double** A);
+    MA57();
+    MA57(const int n, const int nz, double** A);
     
-    void Initialize();
-    void Analyze();
     void Factorize();
     void Solve(double* rhs);
     
@@ -46,7 +45,9 @@ protected:
     
     double* sol;        // Solution
     
-    
+    // Internal functions
+    void Initialize();
+    void Analyze();
     
 };
 
@@ -65,16 +66,11 @@ extern "C" {
                         int *ifact, int *lifact, int *nrhs, double *rhs,
                         int *lrhs, double *w, int *lw, int *iw,
                         int icntl[20], int info[40]);
-    /*
-     * w        - double array of length lw; workspace
-     * lw       - integer, length of w
-     * iw       - integer array of length n; workspace
-     */
 #ifdef __cplusplus
 }
 #endif
 
-cma57::cma57(const int i_n, const int i_nz, double** A)
+MA57::MA57(const int i_n, const int i_nz, double** A)
 {
     n = i_n;
     nz = i_nz;
@@ -105,21 +101,24 @@ cma57::cma57(const int i_n, const int i_nz, double** A)
     iw = new int[5*n];
     
     job = 1;
+    
+    Initialize();
+    Analyze();
 }
 
-void cma57::Initialize()
+void MA57::Initialize()
 {
     ma57id_(cntl, icntl);
     //icntl[4] = 4;
 }
 
-void cma57::Analyze()
+void MA57::Analyze()
 {
     ma57ad_(&n, &nz, irn, jcn, &lkeep, keep, iw,
             icntl, info, rinfo);
 }
 
-void cma57::Factorize()
+void MA57::Factorize()
 {
     lfact = 1.2*info[8];
     fact = new double[lfact];
@@ -130,7 +129,7 @@ void cma57::Factorize()
             keep, iw, icntl, cntl, info, rinfo);
 }
 
-void cma57::Solve(double* rhs)
+void MA57::Solve(double* rhs)
 {
     int nrhs = 1;               // number of right hand side being solved
     int lw = 1.2*n*nrhs;        // length of w; lw>=n*nrhs
@@ -148,7 +147,7 @@ void cma57::Solve(double* rhs)
     delete[] w;
 }
 
-double* cma57::getSol()
+double* MA57::getSol()
 {
     return sol;
 }

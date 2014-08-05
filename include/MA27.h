@@ -1,28 +1,25 @@
 /*
-* Header file for cma27
-* Created by Yiming Yan 
-* 25 July 2014
-*/
-#ifndef maSolver_cma27_h
-#define maSolver_cma27_h
+ * Header file for MA27
+ * Created by Yiming Yan
+ * 25 July 2014
+ */
+#ifndef linsolve_MA27_h
+#define linsolve_MA27_h
 
 #include <cmath>
 
-class cma27
+class MA27
 {
 public:
-    cma27(const int n, const int nz, double** A);
+    MA27();
+    MA27(const int n, const int nz, double** A);
     
-    void Initialize();
-    void Analyze();
-    void Factorize(double** A);
+    void Factorize();
     void Solve(double* rhs);
-    /*
-     *rhs      - right hand side of the linear system (b in Ax=b);
-     */
     
     double* getSol();
 protected:
+    
     int n;              // order of matrix, namely number of rows or cols
     int nz;             // number of nonzeros entries
     int icntl[30];      // integer array of length 30; integer control values
@@ -45,6 +42,11 @@ protected:
     int maxfrt;         // integer, to be set by ma27
     
     double* sol;         // double array of length n; holds the solution
+    
+    // Internal function
+    void Initialize();
+    void Analyze();
+    
 };
 
 #ifdef __cplusplus
@@ -81,7 +83,12 @@ extern "C" {
 }
 #endif
 
-cma27::cma27(const int i_n, const int i_nz, double** A)
+/*
+ * Implementation details
+ */
+MA27::MA27(){}
+
+MA27::MA27(const int i_n, const int i_nz, double** A)
 {
     n   = i_n;
     nz  = i_nz;
@@ -105,33 +112,17 @@ cma27::cma27(const int i_n, const int i_nz, double** A)
             {
                 irn[counter] = i+1; // fortran index
                 icn[counter] = j+1; // start from 1
-                
                 counter++;
             }
         }
     }
-
-}
-
-void cma27::Initialize()
-{
-    ma27id_(icntl, cntl);
-    //icntl[2] = 2;
-}
-
-void cma27::Analyze()
-{
-    ma27ad_(&n, &nz, irn, icn, iw, &liw, ikeep, iw1, &nsteps,
-            &iflag, icntl, cntl, info, &ops);
-}
-
-void cma27::Factorize(double** A)
-{
+    
+    Initialize();
+    Analyze();
+    
     la = 1.5*info[4];
     factor = new double[la];
-    
-    // pass data
-    int counter = 0;
+    counter = 0;
     for (int i=0; i<nz; i++)
     {
         for (int j=i; j<n; j++)
@@ -143,13 +134,29 @@ void cma27::Factorize(double** A)
             }
         }
     }
-    
+
+}
+
+void MA27::Initialize()
+{
+    ma27id_(icntl, cntl);
+    //icntl[2] = 2;
+}
+
+void MA27::Analyze()
+{
+    ma27ad_(&n, &nz, irn, icn, iw, &liw, ikeep, iw1, &nsteps,
+            &iflag, icntl, cntl, info, &ops);
+}
+
+void MA27::Factorize()
+{
     ma27bd_(&n, &nz, irn, icn, factor, &la, iw, &liw,
             ikeep,  &nsteps, &maxfrt, iw1,
             icntl,  cntl, info);
 }
 
-void cma27::Solve(double* rhs)
+void MA27::Solve(double* rhs)
 {
     double* w = new double[maxfrt]; // double workspace
     sol = new double[n];
@@ -162,7 +169,7 @@ void cma27::Solve(double* rhs)
     delete[] w;
 }
 
-double* cma27::getSol()
+double* MA27::getSol()
 {
     return sol;
 }
