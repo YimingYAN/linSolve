@@ -1,4 +1,4 @@
-maSolver
+linSolve
 =====
 
 C++ interface to MA27/MA57 from HSL Mathematical Software Library
