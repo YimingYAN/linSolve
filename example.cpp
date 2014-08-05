@@ -6,6 +6,7 @@
 using namespace std;
 
 void printSol(int n, const double* sol);
+void printSystem(int m, int n, double** A, double* b);
 
 int main (int argc, char *argv[])
 {
@@ -29,8 +30,10 @@ int main (int argc, char *argv[])
     A[4][1] = 6; A[4][4] = 1;
     
     double b[n];
-    b[0] = 8; b[1] = 45.; b[2] = 31.; b[3] = 15.; b[4] = 17.;
-    
+    b[0] = 8.; b[1] = 45.; b[2] = 31.; b[3] = 15.; b[4] = 17.;
+    double b2[n];
+    b2[0] = 1.; b2[1] = 2.; b2[2] = 1.; b2[3] = 2.; b2[4] = 3.;
+
     double* sol27_1;
     double* sol27_2;
     double* sol57_1;
@@ -50,22 +53,14 @@ int main (int argc, char *argv[])
     /*
      * Test MA27
      */
+    printSystem(n,n,A,b);
+    
     linSolveT27.Factorize();
     linSolveT27.Solve(b);
     sol27_1 = linSolveT27.getSol();
     
     cout<<"Solution for Ax = b using MA27:"<<endl;
     printSol(n, sol27_1);
-    
-    /*
-     * Just the right hand side; no need to factorize the matirx again.
-     */
-    double b2[5] = {1,2,1,2,3};
-    
-    linSolveT27.Solve(b2);
-    sol27_2 = linSolveT27.getSol();
-    cout<<"Solution for Ax = b2 using MA27:"<<endl;
-    printSol(n, sol27_2);
     
     /*
      * Test MA57
@@ -77,9 +72,19 @@ int main (int argc, char *argv[])
     cout<<"Solution for Ax = b using MA57:"<<endl;
     printSol(n, sol57_1);
     
+    /*
+     * Just the right hand side; no need to factorize the matirx again.
+     */
+    printSystem(n,n,A,b2);
+    
+    linSolveT27.Solve(b2);
+    sol27_2 = linSolveT27.getSol();
+    cout<<"Solution for Ax = b2 using MA27:"<<endl;
+    printSol(n, sol27_2);
+    
     linSolveT57.Solve(b2);
     sol57_2 = linSolveT57.getSol();
-    cout<<"Solution for Ax = b using MA57:"<<endl;
+    cout<<"Solution for Ax = b2 using MA57:"<<endl;
     printSol(n, sol57_2);
     
     /* ====== End linSolve ====== */
@@ -103,4 +108,29 @@ void printSol(int n, const double* sol)
         cout<<", "<<sol[i];
     }
     cout<<" )"<<endl;
+}
+
+void printSystem(int m, int n, double** A, double* b)
+{
+	int mid = (int) m/2;
+
+	cout<<"\n\nThe linear system to solve: "<<endl;
+	for (int i = 0; i < m; i++)
+	{
+		cout<<"[ ";
+		for (int j=0; j<n; j++)
+		{	if (fabs(A[i][j]) < 1e-05)
+				cout<<"  ";
+			else
+				cout<<A[i][j]<<" ";
+		}
+		cout<<"]";
+		cout<<"[ x_"<<to_string(i) <<"]";
+		if (i == mid) cout<<" = ";
+		else cout<<"   "; 
+		cout<<"[ "<<b[i]<<" ]"<<endl;
+	} 
+    cout<<endl;
+
+
 }

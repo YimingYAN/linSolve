@@ -24,3 +24,4 @@ test:
 clean:
 	rm $(FOBJS)
 	rm $(main)
+	@rm -rf *.dSYM
