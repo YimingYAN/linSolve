@@ -1,13 +1,13 @@
-#include "cma27.h"
-#include "cma57.h"
+#include "MA27.h"
+#include "MA57.h"
+#include "linSolve.h"
 #include <iostream>
 
 using namespace std;
 
 int main (int argc, char *argv[])
 {
-    cout<<"Test cma27.h... "<<endl;
-    
+ 
     /* ====== Begin Data ====== */
     int n  = 5;
     int nz = 7;
@@ -26,47 +26,50 @@ int main (int argc, char *argv[])
     A[3][2] = 5;
     A[4][1] = 6; A[4][4] = 1;
     
-    double rhs[n];
-    rhs[0] = 8; rhs[1] = 45.; rhs[2] = 31.; rhs[3] = 15.; rhs[4] = 17.;
+    double b[n];
+    b[0] = 8; b[1] = 45.; b[2] = 31.; b[3] = 15.; b[4] = 17.;
     
-    double* sol27;
-    double* sol57;
+    double* sollinSol;
+    double* sollinSol2;
     /* ====== End Data ====== */
     
+    /* ====== Test linSolve with MA27 ====== */
+	linSolve<double*, double**,MA27> linSolveT(n, nz, A);
+    /*
+     * Here we set the vector type to be double* and the matrix type to be double**
+     * Currently it only accepts dynamically allocated arrays, 
+     * becasue of the implementation of MA27 and MA57.
+     */
     
-    /* ====== Begin MA27 ====== */
-    cma27 cma27(n, nz, A);
-    cma27.Initialize();
-    cma27.Analyze();
-    cma27.Factorize(A);
-    cma27.Solve(rhs);
-    sol27 = cma27.getSol();
-    cout<<"Solution from MA27:"<<endl;
-    for (int i=0; i<n; i++)
+    linSolveT.Factorize();
+    linSolveT.Solve(b);
+    sollinSol = linSolveT.getSol();
+    
+    cout<<"Solution for Ax = b:"<<endl;
+    cout<<"( "<<sollinSol[0];
+    for (int i=1; i<n; i++)
     {
-        cout<<"\t"<<sol27[i]<<endl;
+        cout<<", "<<sollinSol[i];
     }
-    /* ====== End MA27 ====== */
+    cout<<" )"<<endl;
     
+    /*
+     * Just the right hand side; no need to factorize the matirx again.
+     */
+    double b2[5] = {1,2,1,2,3};
+    linSolveT.Solve(b2);
+    sollinSol2 = linSolveT.getSol();
     
-    /* ====== Begin MA57 ====== */
-    cout<<"Test cma57.h... "<<endl;
-    
-    cma57 cma57(n,nz, A);
-    cma57.Initialize();
-    cma57.Analyze();
-    cma57.Factorize();
-    cma57.Solve(rhs);
-    sol57 = cma57.getSol();
-    
-    cout<<"Solution from MA57:"<<endl;
-    for (int i=0; i<n; i++)
+    cout<<"Solution for Ax = b2:"<<endl;
+    cout<<"( "<<sollinSol2[0];
+    for (int i=1; i<n; i++)
     {
-        cout<<"\t"<<sol57[i]<<endl;
+        cout<<", "<<sollinSol2[i];
     }
+    cout<<" )"<<endl;
     
-    /* ====== End MA57 ====== */
-    
+    /* ====== End linSolve ====== */
+
     /* Release memory*/
     for (int i=0; i<5; i++)
     {
