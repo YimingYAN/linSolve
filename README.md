@@ -10,7 +10,7 @@ C++ interface to MA27/MA57 from HSL Mathematical Software Library.
 where A is symmetric matrix.
 
 ###How to Use
-1. Add source codes of the solver you would like to use (eg, MA27) to its corresponding folder; for details see the Section "Add Scource Codes".
+1. Add source codes of the solver you would like to use (eg, MA27) to its corresponding folder; for details see Section "Add Scource Codes".
 2. In your code, add headers 
 
   ```#include "linSolve.h"```
