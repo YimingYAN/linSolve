@@ -50,10 +50,11 @@ int main (int argc, char *argv[])
      * becasue of the implementation of MA27 and MA57.
      */
     
+    printSystem(n,n,A,b);
+    
     /*
      * Test MA27
      */
-    printSystem(n,n,A,b);
     
     linSolveT27.Factorize();
     linSolveT27.Solve(b);
@@ -73,7 +74,7 @@ int main (int argc, char *argv[])
     printSol(n, sol57_1);
     
     /*
-     * Just the right hand side; no need to factorize the matirx again.
+     * Just the change right hand side; no need to factorize the matirx again.
      */
     printSystem(n,n,A,b2);
     
