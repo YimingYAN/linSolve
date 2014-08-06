@@ -7,7 +7,7 @@ C++ interface to MA27/MA57 from HSL Mathematical Software Library.
 ```
   Ax = b,
 ```
-where A is symmetric matrix.
+where A is symmetric.
 
 ###How to Use
 1. Add source codes of the solver you would like to use (eg, MA27) to its corresponding folder; for details see Section "Add Scource Codes".
