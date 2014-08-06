@@ -18,7 +18,7 @@ where A is symmetric matrix.
   ```   #include "MA27.h" ``` (or "MA57.h" if you would like to use MA57)  
 3. Declare the object:
   ```
-    linSolve<Vector_Type, Matrix_Type, Solver> theSolver(n, nz, A),
+    linSolve<Vector_Type, Matrix_Type, Solver> theSolver(n, nz, A)
   ```
   where n is the number of rows/cols and nz is the number of non-zeros. 
   Currently the interface only accepts dynamically allocated arrays, namely
