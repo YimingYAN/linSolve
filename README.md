@@ -42,4 +42,4 @@ The interface works with MA57 version 3.9.0.
 
 ----
 
-* Currently not support Metis.
+* Currently does not support Metis.
