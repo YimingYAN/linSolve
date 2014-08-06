@@ -10,12 +10,13 @@ C++ interface to MA27/MA57 from HSL Mathematical Software Library.
 where A is symmetric matrix.
 
 ###How to Use
-1. Add source codes of the solver you would like to use (eg, MA27) to its corresponding folder; for details see the Section "Add Scource Codes";
+1. Add source codes of the solver you would like to use (eg, MA27) to its corresponding folder; for details see the Section "Add Scource Codes".
 2. In your code, add headers 
 
   ```#include "linSolve.h"```
 
-  ```   #include "MA27.h" ``` (or "MA57.h" if you would like to use MA57)  
+  ```   #include "MA27.h" ``` (or "MA57.h" if you would like to use MA57).  
+  Remember to include the path to the header files when compile.
 3. Declare the object:
   ```
     linSolve<Vector_Type, Matrix_Type, Solver> theSolver(n, nz, A)
@@ -23,11 +24,13 @@ where A is symmetric matrix.
   where n is the number of rows/cols and nz is the number of non-zeros. 
   Currently the interface only accepts dynamically allocated arrays, namely
   ```
-    linSolve<double*, double**, MA27> theSolver(n, nz, A).
-  ```
+    linSolve<double*, double**, MA27> theSolver(n, nz, A)
+  ```.
+  See example.cpp for more details.
 
-###Test code
-1. Try ```make``` and then ```make test``` to see if it works.
+###Example
+1. See example.cpp
+1. Try ```make``` and then ```make test``` to see if it works
 
 ###Add Source Codes
 1. Download ```MA27```. Go to [HSL Archive](http://www.hsl.rl.ac.uk/archive/), find MA27 and choose [source](http://www.hsl.rl.ac.uk/download/MA27/1.0.0/a/).
